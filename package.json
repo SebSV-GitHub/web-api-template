@@ -1,0 +1,42 @@
+{
+	"name": "nodejs-template",
+	"version": "1.0.0",
+	"description": "Node.js Template",
+	"type": "module",
+	"exports": "./src/index.js",
+	"scripts": {
+		"build": "tsc && tsc-alias",
+		"start": "node .",
+		"dev": "tsx watch src/index.ts",
+		"test": "jest",
+		"prepare": "husky install"
+	},
+	"engines": {
+		"node": ">=16"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/SebSV-GitHub/nodejs-template.git"
+	},
+	"keywords": [
+		"Template"
+	],
+	"author": "Sebastián Suárez Valencia <contact@sebsv.com> (https://www.sebsv.com)",
+	"license": "MIT",
+	"bugs": {
+		"url": "https://github.com/SebSV-GitHub/nodejs-template/issues"
+	},
+	"homepage": "https://github.com/SebSV-GitHub/nodejs-template#readme",
+	"devDependencies": {
+		"@types/jest": "^29.5.4",
+		"husky": "^8.0.3",
+		"jest": "^29.6.4",
+		"lint-staged": "^14.0.1",
+		"prettier": "^3.0.3",
+		"ts-jest": "^29.1.1",
+		"tsc-alias": "^1.8.7",
+		"tsx": "^3.12.7",
+		"typescript": "^5.2.2",
+		"xo": "^0.56.0"
+	}
+}
