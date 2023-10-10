@@ -1,0 +1,31 @@
+{
+	"openapi": "3.1.0",
+	"info": {
+		"title": "Template api",
+		"version": "1.0.0"
+	},
+	"servers": [
+		{
+			"url": "http://localhost:{port}",
+			"description": "Local",
+			"variables": {
+				"port": {
+					"default": "8080"
+				}
+			}
+		}
+	],
+	"paths": {
+		"/health-check": {
+			"get": {
+				"summary": "Service health check endpoint",
+				"description": "Returns a the health status of the service",
+				"responses": {
+					"200": {
+						"description": "Service is up and running"
+					}
+				}
+			}
+		}
+	}
+}

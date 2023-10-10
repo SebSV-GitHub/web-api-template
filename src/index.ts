@@ -1,7 +1,15 @@
-import greet from "@app/modules/example.js";
+import process from "node:process";
+import express from "express";
 
-const name = "John Doe";
+const app = express();
 
-const string_ = greet(name);
+app.get("/health-check", (_request, response) => {
+	response.json({
+		message: "Ok",
+		uptime: process.uptime(),
+	});
+});
 
-console.log(string_);
+app.listen(8080, () => {
+	console.log("Server listening on port 8080");
+});
