@@ -2,8 +2,24 @@
 	"openapi": "3.1.0",
 	"info": {
 		"title": "Template api",
+		"description": "Web api template with use cases examples",
+		"contact": {
+			"name": "Sebastián Suárez Valencia",
+			"url": "https://sebsv.com/",
+			"email": "contact@sebsv.com"
+		},
+		"license": {
+			"name": "MIT License",
+			"identifier": "MIT"
+		},
 		"version": "1.0.0"
 	},
+	"tags": [
+		{
+			"name": "Service health",
+			"description": "Uitilites for service status validation"
+		}
+	],
 	"servers": [
 		{
 			"url": "http://localhost:{port}",
@@ -18,6 +34,8 @@
 	"paths": {
 		"/health-check": {
 			"get": {
+				"operationId": "health-check",
+				"tags": ["Service health"],
 				"summary": "Service health check endpoint",
 				"description": "Returns a the health status of the service",
 				"responses": {
