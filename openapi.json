@@ -96,6 +96,9 @@
         "responses": {
           "201": {
             "description": "User created"
+          },
+          "409": {
+            "description": "Username already exists"
           }
         }
       }
