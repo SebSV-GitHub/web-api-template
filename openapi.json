@@ -1,49 +1,104 @@
 {
-	"openapi": "3.1.0",
-	"info": {
-		"title": "Template api",
-		"description": "Web api template with use cases examples",
-		"contact": {
-			"name": "Sebastián Suárez Valencia",
-			"url": "https://sebsv.com/",
-			"email": "contact@sebsv.com"
-		},
-		"license": {
-			"name": "MIT License",
-			"identifier": "MIT"
-		},
-		"version": "1.0.0"
-	},
-	"tags": [
-		{
-			"name": "Service health",
-			"description": "Uitilites for service status validation"
-		}
-	],
-	"servers": [
-		{
-			"url": "http://localhost:{port}",
-			"description": "Local",
-			"variables": {
-				"port": {
-					"default": "8080"
-				}
-			}
-		}
-	],
-	"paths": {
-		"/health-check": {
-			"get": {
-				"operationId": "health-check",
-				"tags": ["Service health"],
-				"summary": "Service health check endpoint",
-				"description": "Returns a the health status of the service",
-				"responses": {
-					"200": {
-						"description": "Service is up and running"
-					}
-				}
-			}
-		}
-	}
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Template api",
+    "description": "Web api template with use cases examples",
+    "contact": {
+      "name": "Sebastián Suárez Valencia",
+      "url": "https://sebsv.com/",
+      "email": "contact@sebsv.com"
+    },
+    "license": {
+      "name": "MIT License",
+      "identifier": "MIT"
+    },
+    "version": "1.0.0"
+  },
+  "tags": [
+    {
+      "name": "Service health",
+      "description": "Uitilites for service status validation"
+    },
+    {
+      "name": "User",
+      "description": "Users modules"
+    }
+  ],
+  "servers": [
+    {
+      "url": "http://localhost:{port}/api",
+      "description": "Local",
+      "variables": {
+        "port": {
+          "default": "8080"
+        }
+      }
+    }
+  ],
+  "paths": {
+    "/health-check": {
+      "get": {
+        "operationId": "health-check",
+        "tags": ["Service health"],
+        "summary": "Service health check endpoint",
+        "description": "Returns a the health status of the service",
+        "responses": {
+          "200": {
+            "description": "Service is up and running"
+          }
+        }
+      }
+    },
+    "/users": {
+      "get": {
+        "operationId": "get-all-users",
+        "tags": ["User"],
+        "summary": "Retieves all the users",
+        "description": "Returns an array of all the existing users in the database",
+        "responses": {
+          "200": {
+            "description": "Array of users"
+          }
+        }
+      },
+      "post": {
+        "operationId": "create-user",
+        "tags": ["User"],
+        "summary": "Create a new user",
+        "description": "Creates a new user record in the database",
+        "requestBody": {
+          "description": "User input",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "username": {
+                    "type": "string"
+                  },
+                  "password": {
+                    "type": "string"
+                  }
+                }
+              },
+              "example": {
+                "name": "John Doe",
+                "username": "johndoe",
+                "password": "s3cr3t"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "User created"
+          }
+        }
+      }
+    }
+  }
 }
