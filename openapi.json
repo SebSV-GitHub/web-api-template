@@ -22,6 +22,10 @@
     {
       "name": "User",
       "description": "Users modules"
+    },
+    {
+      "name": "Authentication",
+      "description": "Authentication modules"
     }
   ],
   "servers": [
@@ -58,6 +62,9 @@
         "responses": {
           "200": {
             "description": "Array of users"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
           }
         }
       },
@@ -98,45 +105,121 @@
             "description": "User created"
           },
           "400": {
-            "description": "Invalid user schema",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "message": {
-                      "type": "string"
-                    }
-                  }
-                },
-                "examples": {
-                  "name": {
-                    "summary": "Missing name",
-                    "description": "Name field is missing in the payload",
-                    "value": {
-                      "message": "\"name\" is required"
-                    }
-                  }
-                }
-              }
-            }
+            "$ref": "#/components/responses/400"
           },
           "409": {
             "description": "Username already exists",
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "message": {
-                      "type": "string"
-                    }
-                  }
+                  "$ref": "#/components/schemas/error"
                 },
                 "example": {
                   "message": "Username already in use"
                 }
               }
+            }
+          }
+        }
+      }
+    },
+    "/authentications": {
+      "post": {
+        "operationId": "authenticate",
+        "tags": ["Authentication"],
+        "summary": "User authentication",
+        "description": "Uses the username and password to return an Authorization token",
+        "requestBody": {
+          "description": "User credentials",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "username": {
+                    "type": "string"
+                  },
+                  "password": {
+                    "type": "string"
+                  }
+                }
+              },
+              "example": {
+                "username": "johndoe",
+                "password": "s3cr3t"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "User authenticated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "token": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "example": {
+                  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImpvaG5kb2UiLCJpYXQiOjE2OTcwNzI0NTQsImV4cCI6MTY5NzA3MzM1NH0.fElTpx_9cBNQreJe7Fz12ggM-xh39KS-Y2Iqvdm4bz8"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "403": {
+            "description": "Wrong username or password",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error"
+                }
+              }
+            }
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "error": {
+        "description": "API error definition",
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "responses": {
+      "400": {
+        "description": "Invalid request",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/error"
+            }
+          }
+        }
+      },
+      "500": {
+        "description": "Internal server error",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/error"
             }
           }
         }
