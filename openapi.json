@@ -97,8 +97,47 @@
           "201": {
             "description": "User created"
           },
+          "400": {
+            "description": "Invalid user schema",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "examples": {
+                  "name": {
+                    "summary": "Missing name",
+                    "description": "Name field is missing in the payload",
+                    "value": {
+                      "message": "\"name\" is required"
+                    }
+                  }
+                }
+              }
+            }
+          },
           "409": {
-            "description": "Username already exists"
+            "description": "Username already exists",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "example": {
+                  "message": "Username already in use"
+                }
+              }
+            }
           }
         }
       }
