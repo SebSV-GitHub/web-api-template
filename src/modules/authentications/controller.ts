@@ -11,14 +11,14 @@ async function authenticate(credentials: Credentials) {
 	const user = await prisma.user.findUnique({ where: { username } });
 
 	if (!user) {
-		throw new AppError("Invalid credentials", 403, "Username not found");
+		throw new AppError("Invalid credentials", 401, "Username not found");
 	}
 
 	if (!(await verify(user.password, password))) {
-		throw new AppError("Invalid credentials", 403, "Wrong password");
+		throw new AppError("Invalid credentials", 401, "Wrong password");
 	}
 
-	return sign({ username });
+	return sign({ userId: user.id });
 }
 
 export { authenticate };

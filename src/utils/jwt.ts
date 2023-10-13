@@ -2,6 +2,7 @@ import process from "node:process";
 import jwt from "jsonwebtoken";
 import config from "config";
 import type Session from "@app/types/session.js";
+import AppError from "./app-error.js";
 
 function sign(payload: Session) {
 	const secret = getSecret();
@@ -10,7 +11,19 @@ function sign(payload: Session) {
 
 function verify(token: string) {
 	const secret = getSecret();
-	return jwt.verify(token, secret);
+	try {
+		return jwt.verify(token, secret);
+	} catch (error: unknown) {
+		if (error instanceof Error) {
+			if (error.name === "JsonWebTokenError") {
+				throw new AppError("Invalid token", 401);
+			}
+
+			if (error.name === "TokenExpiredError") {
+				throw new AppError("Expired token", 401);
+			}
+		}
+	}
 }
 
 function getSecret() {

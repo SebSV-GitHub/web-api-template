@@ -4,16 +4,16 @@ import { hash } from "@app/utils/password.js";
 import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library.js";
 import AppError from "@app/utils/app-error.js";
 
-const client = new PrismaClient();
+const prisma = new PrismaClient();
 
 async function getAllUsers() {
-	return client.user.findMany();
+	return prisma.user.findMany();
 }
 
 async function createUser(userInput: Omit<User, "id">) {
 	const password = await hash(userInput.password);
 	try {
-		return await client.user.create({ data: { ...userInput, password } });
+		return await prisma.user.create({ data: { ...userInput, password } });
 	} catch (error: unknown) {
 		if (
 			error instanceof PrismaClientKnownRequestError &&

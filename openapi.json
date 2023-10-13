@@ -26,6 +26,10 @@
     {
       "name": "Authentication",
       "description": "Authentication modules"
+    },
+    {
+      "name": "Post",
+      "description": "User posts module"
     }
   ],
   "servers": [
@@ -48,7 +52,28 @@
         "description": "Returns a the health status of the service",
         "responses": {
           "200": {
-            "description": "Service is up and running"
+            "description": "Service is up and running",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    },
+                    "uptime": {
+                      "type": "number"
+                    }
+                  },
+                  "examples": [
+                    {
+                      "message": "Ok",
+                      "uptime": 3448.535376125
+                    }
+                  ]
+                }
+              }
+            }
           }
         }
       }
@@ -61,7 +86,17 @@
         "description": "Returns an array of all the existing users in the database",
         "responses": {
           "200": {
-            "description": "Array of users"
+            "description": "Array of users",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/user"
+                  }
+                }
+              }
+            }
           },
           "500": {
             "$ref": "#/components/responses/500"
@@ -78,23 +113,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "type": "object",
-                "properties": {
-                  "name": {
-                    "type": "string"
-                  },
-                  "username": {
-                    "type": "string"
-                  },
-                  "password": {
-                    "type": "string"
-                  }
-                }
-              },
-              "example": {
-                "name": "John Doe",
-                "username": "johndoe",
-                "password": "s3cr3t"
+                "$ref": "#/components/schemas/user"
               }
             }
           },
@@ -142,11 +161,13 @@
                   "password": {
                     "type": "string"
                   }
-                }
-              },
-              "example": {
-                "username": "johndoe",
-                "password": "s3cr3t"
+                },
+                "examples": [
+                  {
+                    "username": "johndoe",
+                    "password": "s3cr3t"
+                  }
+                ]
               }
             }
           },
@@ -163,10 +184,12 @@
                     "token": {
                       "type": "string"
                     }
-                  }
-                },
-                "example": {
-                  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImpvaG5kb2UiLCJpYXQiOjE2OTcwNzI0NTQsImV4cCI6MTY5NzA3MzM1NH0.fElTpx_9cBNQreJe7Fz12ggM-xh39KS-Y2Iqvdm4bz8"
+                  },
+                  "examples": [
+                    {
+                      "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImpvaG5kb2UiLCJpYXQiOjE2OTcwNzI0NTQsImV4cCI6MTY5NzA3MzM1NH0.fElTpx_9cBNQreJe7Fz12ggM-xh39KS-Y2Iqvdm4bz8"
+                    }
+                  ]
                 }
               }
             }
@@ -174,7 +197,7 @@
           "400": {
             "$ref": "#/components/responses/400"
           },
-          "403": {
+          "401": {
             "description": "Wrong username or password",
             "content": {
               "application/json": {
@@ -189,10 +212,86 @@
           }
         }
       }
+    },
+    "/posts": {
+      "post": {
+        "operationId": "create-post",
+        "tags": ["Post"],
+        "summary": "Create a new user post",
+        "description": "Creates a new post and assigns it to the authenticated user",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "description": "Post input",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "title": {
+                    "type": "string"
+                  },
+                  "content": {
+                    "type": "string"
+                  }
+                },
+                "examples": [
+                  {
+                    "title": "Lorem ipsum",
+                    "content": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer imperdiet nec felis quis volutpat. Aenean dictum eleifend massa vestibulum finibus. Cras luctus risus sed nisl pellentesque rutrum in sed lorem."
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Post created"
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        }
+      }
     }
   },
   "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer"
+      }
+    },
     "schemas": {
+      "user": {
+        "description": "User definition",
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "username": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          }
+        },
+        "examples": [
+          {
+            "name": "John Doe",
+            "username": "johndoe",
+            "password": "s3cr3t"
+          }
+        ]
+      },
       "error": {
         "description": "API error definition",
         "type": "object",
@@ -200,7 +299,12 @@
           "message": {
             "type": "string"
           }
-        }
+        },
+        "examples": [
+          {
+            "message": "Something went wrong"
+          }
+        ]
       }
     },
     "responses": {
@@ -220,6 +324,9 @@
           "application/json": {
             "schema": {
               "$ref": "#/components/schemas/error"
+            },
+            "example": {
+              "message": "Unknown error occurred"
             }
           }
         }
