@@ -1,5 +1,6 @@
 import loadBodyParser from "./body-parser.js";
+import cors from "./cors.js";
 
-const loaders = [loadBodyParser()];
+const loaders = [loadBodyParser(), cors()];
 
 export default loaders;
