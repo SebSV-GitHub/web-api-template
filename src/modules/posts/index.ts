@@ -19,4 +19,14 @@ routes.post(
 	})
 );
 
+routes.get(
+	"/posts",
+	authHandler,
+	requestMiddleware(async (request, response) => {
+		const { userId } = request.session;
+		const posts = await controller.getPosts(userId);
+		response.json(posts);
+	})
+);
+
 export default routes;

@@ -10,4 +10,12 @@ async function createPost(
 	return prisma.post.create({ data: { ...postInput, authorId: userId } });
 }
 
-export { createPost };
+async function getPosts(userId: number) {
+	return prisma.post.findMany({
+		where: {
+			authorId: userId,
+		},
+	});
+}
+
+export { createPost, getPosts };
