@@ -1,8 +1,12 @@
 import Joi from "joi";
 
-const schema = Joi.object({
+const postInput = Joi.object({
 	title: Joi.string().required(),
 	content: Joi.string().required(),
 }).required();
 
-export default schema;
+const postParameters = Joi.object({
+	id: Joi.number().positive().required(),
+});
+
+export { postInput, postParameters };

@@ -18,4 +18,13 @@ async function getPosts(userId: number) {
 	});
 }
 
-export { createPost, getPosts };
+async function deletePost(userId: number, postId: number) {
+	return prisma.post.delete({
+		where: {
+			id: postId,
+			authorId: userId,
+		},
+	});
+}
+
+export { createPost, getPosts, deletePost };

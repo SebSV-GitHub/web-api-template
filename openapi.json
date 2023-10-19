@@ -241,6 +241,9 @@
           "400": {
             "$ref": "#/components/responses/400"
           },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
           "500": {
             "$ref": "#/components/responses/500"
           }
@@ -263,10 +266,56 @@
               "application/json": {
                 "schema": {
                   "type": "array",
-                  "items": {}
+                  "items": {
+                    "$ref": "#/components/schemas/post"
+                  }
                 }
               }
             }
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        }
+      }
+    },
+    "/posts/{id}": {
+      "delete": {
+        "operationId": "delete-user-post",
+        "tags": ["Post"],
+        "summary": "Delete user post",
+        "description": "Deletes a post related with the authenticated user",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "description": "Id of the post to be deleted",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Post deleted successfully"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
           }
         }
       }
@@ -275,6 +324,7 @@
   "components": {
     "securitySchemes": {
       "bearerAuth": {
+        "description": "Authentication token",
         "type": "http",
         "scheme": "bearer"
       }
@@ -338,6 +388,29 @@
     "responses": {
       "400": {
         "description": "Invalid request",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/error"
+            }
+          }
+        }
+      },
+      "401": {
+        "description": "Authentication issues",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/error"
+            },
+            "example": {
+              "message": "Missing authorization"
+            }
+          }
+        }
+      },
+      "403": {
+        "description": "Unauthorized",
         "content": {
           "application/json": {
             "schema": {
